@@ -3,31 +3,61 @@ from django.contrib.auth import login,authenticate
 from django.shortcuts import redirect,render
 from django.contrib import messages
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login
+from ..auth_forms import CustomUserCreationForm  # import our custom form
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def student_dashboard(request):
+    return render(request, 'auth/student_dashboard.html')
+
+@login_required
+def faculty_dashboard(request):
+    return render(request, 'auth/faculty_dashboard.html')
+
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save()
+            login(request, user)  # Auto login after registration
+            messages.success(request, "Account created successfully!")
+            return redirect('home_page')
     else:
-        form=UserCreationForm()
-    return render(request,'auth/register.html',{'form':form})   
+        form = CustomUserCreationForm()
+    return render(request, 'auth/register.html', {'form': form})
+
  
 # This is built-in login form -->AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 def login_views(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data = request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request,user) 
-            return redirect('home_page')
+            login(request, user)
+
+            # Role-based redirection
+            if user.role == 'student':
+                return redirect('student_dashboard')
+            elif user.role == 'faculty':
+                return redirect('faculty_dashboard')
+            else:
+                return redirect('home_page')  # default fallback
+
         else:
-            messages.error(request,"Invalid username or password")
+            messages.error(request, "Invalid username or password")
     else:
-        form=AuthenticationForm()
-    return render(request,'auth/login.html',{'form':form})
+        form = AuthenticationForm()
 
-
+    return render(request, 'auth/login.html', {'form': form})
 
 
 

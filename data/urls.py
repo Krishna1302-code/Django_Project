@@ -11,8 +11,8 @@ from .views.managment_views import student_list_managment,Create_student_managme
 from .views.marks_studentdetail_managment import StudentDetail_mangementView
 from .views.marks_views_management import  MarksUpdate_management_View,MarksDelete_management_View
 from .views.faculty_managment import faculty_list_managment,Create_faculty_managment,Update_faculty_managment,Delete_faculty_managment
-from .views.auth_views import register,login_views
-# login_views,logout_views,reset_password_views
+from .views.auth_views import register,login_views,student_dashboard,faculty_dashboard
+
 
 
 urlpatterns = [
@@ -21,8 +21,8 @@ urlpatterns = [
     path('',Home_page, name='home_page'),
     path('register/',register,name='registration'),
     path('login/',login_views,name='login'),
-    # path('logout/',logout_views,name='logout')
-    # path('reset_password/',registration_views,name='reset_password')
+    path('student/dashboard/', student_dashboard, name='student_dashboard'),
+    path('faculty/dashboard/', faculty_dashboard, name='faculty_dashboard'),
     path('total_students/',Total_student,name="total-student"),
     path('facultystudentlist/',student_list,name='student_list'),
     path('facultystudentadd/',Create_student, name='add_student'),

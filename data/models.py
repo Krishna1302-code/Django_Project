@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 class Student_data(models.Model):
     GENDER_CHOICES = [
@@ -24,14 +25,22 @@ class Student_data(models.Model):
         ('12', '12th'),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    from django.conf import settings
+
+    user = models.OneToOneField(
+    settings.AUTH_USER_MODEL, 
+    on_delete=models.CASCADE, 
+    null=True, blank=True
+)
+
     student_name = models.CharField(max_length=100, blank=False,)
     last_name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(unique=True, blank=False)
     contact_no = PhoneNumberField(unique=True, blank=False)
     address = models.CharField(max_length=200, blank=False)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=False)
-    standard = models.CharField(max_length=5, choices=STANDARD_CHOICES, blank=False)
+    standard = models.CharField(max_length=5, choices=STANDARD_CHOICES, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.student_name} {self.last_name}"
@@ -47,7 +56,11 @@ class Subject(models.Model):
 
 
 class Faculty(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+    settings.AUTH_USER_MODEL, 
+    on_delete=models.CASCADE, 
+    null=True, blank=True
+)
     faculty_name = models.CharField(max_length=100, blank=False)
     subject = models.ManyToManyField(Subject, related_name='faculty')
 
@@ -63,8 +76,18 @@ class Marks(models.Model):
     def __str__(self):
         return str(self.marks_obtained)
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 class Custom_User(AbstractUser):
-    role = models.CharField(max_length=100, default='student')
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('faculty', 'Faculty'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return self.username
 
 
 
