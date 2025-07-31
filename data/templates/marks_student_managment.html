@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+<div>
+<ul>
+ 
+  
+{% if student.marks_set.all %}
+  {% for mark in student.marks_set.all %}
+    <li>
+    {{mark.student.student_name}}: {{ mark.subject }} - {{ mark.marks_obtained}}
+    <a href="{% url 'edit_student_marks_management' mark.id %}">Edit</a>
+    <a href="{% url 'delete_studentmarks_management' mark.id %}">Delete</a>
+    </li>
+  {% endfor %}
+
+{% else %}
+  <p>No marks available.</p>
+{% endif %}
+</ul>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Marks</button>
+  </form>
+
+</div>
+</body>
+</html>
