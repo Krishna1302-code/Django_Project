@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+ENV/
+*.env
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Ignore all migrations except __init__.py (so Django can still detect apps)
+**/migrations/*
+!**/migrations/__init__.py
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# MacOS / Linux / Windows system files
+.DS_Store
+Thumbs.db
