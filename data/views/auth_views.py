@@ -1,16 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login,authenticate
 from django.shortcuts import redirect,render
 from django.contrib import messages
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth import login
-from ..auth_forms import CustomUserCreationForm  # import our custom form
-from django.shortcuts import render
+from ..auth_forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import login_required
 
-@login_required
+@login_required #It will restricts access to a view only for logged-in users.
 def student_dashboard(request):
     return render(request, 'auth/student_dashboard.html')
 
@@ -23,7 +18,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Auto login after registration
+            login(request, user) 
             messages.success(request, "Account created successfully!")
             return redirect('home_page')
     else:
@@ -44,13 +39,13 @@ def login_views(request):
             user = form.get_user()
             login(request, user)
 
-            # Role-based redirection
+           
             if user.role == 'student':
                 return redirect('student_dashboard')
             elif user.role == 'faculty':
                 return redirect('faculty_dashboard')
             else:
-                return redirect('home_page')  # default fallback
+                return redirect('home_page') 
 
         else:
             messages.error(request, "Invalid username or password")
