@@ -19,7 +19,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user) 
-            messages.success(request, "Account created successfully!")
+            # messages.success(request, "Account created successfully!")
             return redirect('home_page')
     else:
         form = CustomUserCreationForm()

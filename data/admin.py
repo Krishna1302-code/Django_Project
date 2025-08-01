@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student_data,Subject,Faculty,Marks
+from .models import Student_data,Subject,Faculty,Marks,Custom_User
 
 class StudentAdmin(admin.ModelAdmin):
     list_display= ['student_name', 'last_name','email','contact_no','address','gender']
@@ -20,3 +20,8 @@ class MarksAdmin(admin.ModelAdmin):
     list_display= ['marks_obtained','student','subject']
 
 admin.site.register(Marks,MarksAdmin)
+
+class Custom_UserAdmin(admin.ModelAdmin):
+    list_display= ['role', 'username', 'first_name']
+
+admin.site.register(Custom_User,Custom_UserAdmin)
