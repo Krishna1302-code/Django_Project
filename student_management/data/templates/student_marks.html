@@ -14,8 +14,8 @@
 {% endif %}
 
   
-{% if student.marks_set.all %}
-  {% for mark in student.marks_set.all %}
+{% if marks %}
+  {% for mark in marks %}
     <li>
     {{mark.student.student_name}}: {{ mark.subject }} - {{ mark.marks_obtained}}/100
     <a href="{% url 'edit_marks' mark.id %}">Edit</a>

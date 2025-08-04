@@ -16,6 +16,3 @@ class MarksDeleteView(DeleteView):
     model = Marks
     template_name = "marks_delete.html"
     success_url = reverse_lazy("student_list")
-
-
-# def progress(request):

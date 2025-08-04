@@ -71,9 +71,12 @@ class Marks(models.Model):
     marks_obtained = models.IntegerField()
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     student = models.ForeignKey(Student_data, on_delete=models.CASCADE)
+    standard = models.CharField(
+        max_length=5, choices=Student_data.STANDARD_CHOICES, null=True, blank=True
+    )
 
     def __str__(self):
-        return str(self.marks_obtained)
+        return f"{self.student} - {self.subject}: {self.marks_obtained}"
 
 
 from django.contrib.auth.models import AbstractUser

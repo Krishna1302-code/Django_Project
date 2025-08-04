@@ -10,13 +10,11 @@ class StudentDetailView(DetailView):
     def get(self, request, pk):
         student = get_object_or_404(Student_data, pk=pk)
         form = MarksForm()
-        marks = Marks.objects.filter(
-            student=student
-        )  # will get all marks for this student
 
-        marks_obtained = sum(
-            mark.marks_obtained for mark in marks
-        )  # Calculating total and percentage
+        marks = Marks.objects.filter(student=student, standard=student.standard)
+        # print(student.standard,marks[1].standard)
+
+        marks_obtained = sum(mark.marks_obtained for mark in marks)
         subject_count = marks.count()
         marks_per_subject = 100
         percentage = (
@@ -43,10 +41,25 @@ class StudentDetailView(DetailView):
         if form.is_valid():
             sub = Subject.objects.get(subject_name=form.cleaned_data["subject"])
             cd = form.cleaned_data
+
             Marks.objects.create(
-                student=student, subject=sub, marks_obtained=cd["marks_obtained"]
+                student=student,
+                subject=sub,
+                marks_obtained=cd["marks_obtained"],
+                standard=cd["standard"],
             )
             return redirect(reverse("student_marks", kwargs={"pk": pk}))
+
+        marks = Marks.objects.filter(student=student, standard=student.standard)
+        return render(
+            request,
+            "student_marks.html",
+            {
+                "student": student,
+                "form": form,
+                "marks": marks,
+            },
+        )
 
 
 # from django.views import View
