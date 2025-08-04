@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Student-management</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light p-3">
+      <a href="{%url 'add_faculty'%}" class="btn btn-outline-primary mb-5"
+        >Add new faculty</a
+      >&emsp;
+
+      <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First-name</th>
+      <th scope="col">Subjects</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for f in faculty %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ f.faculty_name }}</td>
+      <td>
+        {% for subject in f.subject.all %}
+          {{ subject.subject_name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+      <td>
+        <a href="{% url 'update_faculty_management' f.id %}">Edit</a>
+        <a href="{% url 'delete_faculty_management' f.id %}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
